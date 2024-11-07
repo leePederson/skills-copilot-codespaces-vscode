@@ -1,27 +1,16 @@
-//create web server
-const express = require('express');
-const app = express();
-const port = 3000;
+//Create web server
+// Create a web server that listens for incoming requests on port 3000. When a request is received, the server should respond with the contents of the comments.json file.
 
-//parse the request body
-app.use(express.json());
+const http = require('http');
+const fs = require('fs');
 
-//store the comments
-const comments = [];
-
-//GET /comments
-app.get('/comments', (req, res) => {
-  res.json(comments);
+const server = http.createServer((req, res) => {
+  fs.readFile('./comments.json', 'utf8', (err, data) => {
+    res.write(data);
+    res.end();
+  });
 });
 
-//POST /comments
-app.post('/comments', (req, res) => {
-  const comment = req.body;
-  comments.push(comment);
-  res.json(comment);
-});
-
-//start the server
-app.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}`);
+server.listen(3000, () => {
+  console.log('Server is listening on port 3000');
 });
