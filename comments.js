@@ -1,12 +1,27 @@
 //create web server
-var express = require('express');
-var app = express();
-var path = require('path');
+const express = require('express');
+const app = express();
+const port = 3000;
 
-//set up the server
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+//parse the request body
+app.use(express.json());
+
+//store the comments
+const comments = [];
+
+//GET /comments
+app.get('/comments', (req, res) => {
+  res.json(comments);
 });
 
-app.listen(3000);
-console.log('Server started at http://localhost:3000');
+//POST /comments
+app.post('/comments', (req, res) => {
+  const comment = req.body;
+  comments.push(comment);
+  res.json(comment);
+});
+
+//start the server
+app.listen(port, () => {
+  console.log(`Server started on http://localhost:${port}`);
+});
